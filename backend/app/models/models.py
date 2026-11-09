@@ -37,6 +37,15 @@ class ReceiptStatus(str, enum.Enum):
     CONFIRMED = "confirmed"
     FAILED = "failed"
 
+transaction_type_enum = Enum(
+    TransactionType,
+    name="transaction_type",
+)
+
+receipt_status_enum = Enum(
+    ReceiptStatus,
+    name="receipt_status",
+)
 
 class User(Base):
     __tablename__ = "users"
@@ -121,7 +130,7 @@ class Category(Base):
     )
 
     type: Mapped[TransactionType] = mapped_column(
-        Enum(TransactionType, name="transaction_type"),
+        transaction_type_enum,
         nullable=False,
     )
 
@@ -176,7 +185,7 @@ class Transaction(Base):
     )
 
     type: Mapped[TransactionType] = mapped_column(
-        Enum(TransactionType, name="transaction_type"),
+        transaction_type_enum,
         nullable=False,
     )
 
@@ -247,7 +256,7 @@ class Receipt(Base):
     )
 
     status: Mapped[ReceiptStatus] = mapped_column(
-        Enum(ReceiptStatus, name="receipt_status"),
+        receipt_status_enum,
         default=ReceiptStatus.UPLOADED,
         nullable=False,
     )
