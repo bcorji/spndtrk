@@ -109,6 +109,17 @@ def update_transaction(
 
     updates = data.model_dump(exclude_unset=True)
 
+    non_nullable_fields = {
+        "amount",
+        "currency",
+        "type",
+        "transaction_date",
+    }
+
+    for field in non_nullable_fields:
+        if field in updates and updates[field] is None:
+            raise ValueError(f"{field} cannot be null")
+
     new_type = updates.get("type", transaction.type)
 
     new_category_id = updates.get(

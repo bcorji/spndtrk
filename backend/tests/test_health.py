@@ -14,7 +14,7 @@ def test_root_endpoint():
     data = response.json()
 
     assert data["message"] == "Welcome to the Spndtrk API"
-    assert data["version"] == "0.1.0"
+    assert data["version"] == "0.2.0"
 
 
 def test_health_endpoint():
