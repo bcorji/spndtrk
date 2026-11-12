@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 
+import '../../../core/network/token_storage.dart';
+
+
 class AuthService {
   final Dio dio;
 
@@ -34,21 +37,22 @@ class AuthService {
       },
     );
 
+    final data = Map<String, dynamic>.from(response.data);
+
+    await TokenStorage().saveToken(
+      data['access_token'] as String,
+    );
+
+    return data;
+  }
+
+  Future<Map<String, dynamic>> getCurrentUser() async {
+    final response = await dio.get('/users/me');
+
     return Map<String, dynamic>.from(response.data);
   }
 
-  Future<Map<String, dynamic>> getCurrentUser(
-    String accessToken,
-  ) async {
-    final response = await dio.get(
-      '/users/me',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
-
-    return Map<String, dynamic>.from(response.data);
+  Future<void> logout() async {
+    await TokenStorage().deleteToken();
   }
 }
