@@ -8,6 +8,7 @@ from app.db.session import engine
 from app.api.v1.auth import router as auth_router
 from app.api.v1.users import router as users_router
 from app.api.v1.transactions import router as transactions_router
+from app.api.v1.analytics import router as analytics_router
 
 
 app = FastAPI(
@@ -20,16 +21,11 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://localhost:8000",
-    ],
+    allow_origin_regex=r"^http://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=False,
-    allow_methods=["GET", "POST", "PATCH", "DELETE"],
-    allow_headers=["Authorization", "Content-Type"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
-
 
 app.include_router(
     auth_router,
@@ -43,6 +39,11 @@ app.include_router(
 
 app.include_router(
     transactions_router,
+    prefix=settings.API_V1_PREFIX,
+)
+
+app.include_router(
+    analytics_router,
     prefix=settings.API_V1_PREFIX,
 )
 
