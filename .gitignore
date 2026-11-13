@@ -46,3 +46,6 @@ credentials.json
 # Coverage
 .coverage
 htmlcov/
+
+# Uploaded receipt files
+backend/storage/
